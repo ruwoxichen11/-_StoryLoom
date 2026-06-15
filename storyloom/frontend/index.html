@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>故事织机 · StoryLoom</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<div class="shell">
+  <!-- 左侧书脊导航 -->
+  <nav class="spine">
+    <div class="brand">故事织机</div>
+    <div class="step active" data-go="1" title="灵感">1<small>灵感</small></div>
+    <div class="step" data-go="2" title="选角">2<small>选角</small></div>
+    <div class="step" data-go="3" title="经纬">3<small>经纬</small></div>
+    <div class="step" data-go="4" title="章回">4<small>章回</small></div>
+    <div class="step" data-go="5" title="戏台">5<small>戏台</small></div>
+    <div class="step" data-go="6" title="付梓">6<small>付梓</small></div>
+    <div class="gear" id="openSettings" title="设置">&#9881;</div>
+  </nav>
+
+  <div class="stage-wrap">
+    <header class="topbar">
+      <span class="work-title" id="workTitle">未选择作品</span>
+      <span class="work-meta" id="workMeta"></span>
+      <span class="spacer"></span>
+      <span class="keychip no" id="keyChip">密钥未配置</span>
+      <button class="btn ghost" id="switchWork">作品架</button>
+    </header>
+
+    <main class="canvas">
+
+      <!-- Stage 1 灵感 -->
+      <section class="stage show" data-stage="1">
+        <div class="stage-head"><span class="idx">STAGE 01</span><h1>灵感入织</h1></div>
+        <p class="stage-sub">把脑中一闪而过的念头交给「灵感缪斯」，它会推演出你这部书的故事基因——题材、基调、核心矛盾与世界底色。</p>
+        <div class="card">
+          <h3><span class="dot"></span>你的灵感</h3>
+          <textarea id="inspText" rows="5" placeholder="一句话、一段设定，甚至一篇随笔都可以……例如：一个能听见旧物记忆的修复师，在一座即将拆迁的老城里寻找一封迟到六十年的信。"></textarea>
+          <div class="btn-row">
+            <button class="btn amber" id="btnExtract">缪斯解析 &rarr;</button>
+            <span class="muted" id="extractHint"></span>
+          </div>
+        </div>
+        <div class="card" id="geneCard" style="display:none">
+          <h3><span class="dot"></span>故事基因</h3>
+          <div id="geneStream" class="muted" style="font-family:var(--mono);font-size:12px;white-space:pre-wrap"></div>
+          <div id="geneForm" style="display:none">
+            <div class="grid c2">
+              <div><label class="fld">题材</label><input id="g_genre" type="text"></div>
+              <div><label class="fld">基调</label><input id="g_mood" type="text"></div>
+            </div>
+            <label class="fld">核心矛盾</label><input id="g_tension" type="text">
+            <label class="fld">世界观前提</label><textarea id="g_premise" rows="2"></textarea>
+            <label class="fld">关键词（顿号分隔）</label><input id="g_keywords" type="text">
+            <div class="btn-row">
+              <button class="btn" id="saveGene">保存并进入选角 &rarr;</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stage 2 选角 -->
+      <section class="stage" data-stage="2">
+        <div class="stage-head"><span class="idx">STAGE 02</span><h1>选角孵化</h1></div>
+        <p class="stage-sub">「选角师」依据故事基因，编织一组彼此咬合、能擦出冲突的角色。每张角色卡含动机、弱点与一个不为人知的秘密。</p>
+        <div class="btn-row">
+          <button class="btn amber" id="btnCast">生成角色阵容</button>
+          <button class="btn ghost" id="btnAddChar">手动添加</button>
+        </div>
+        <div id="castStream" class="muted" style="font-family:var(--mono);font-size:11px;white-space:pre-wrap;margin:12px 0"></div>
+        <div class="grid c2" id="castGrid"></div>
+        <div class="btn-row"><button class="btn" id="toOutline" style="display:none">编织经纬 &rarr;</button></div>
+      </section>
+
+      <!-- Stage 3 经纬 -->
+      <section class="stage" data-stage="3">
+        <div class="stage-head"><span class="idx">STAGE 03</span><h1>经纬编织</h1></div>
+        <p class="stage-sub">「织线师」用起承转合排布主线节点，并预埋支线与伏笔。锁定后将自动拆分为章回。</p>
+        <div class="btn-row">
+          <button class="btn amber" id="btnOutline">规划主线</button>
+          <button class="btn ghost" id="btnLock" style="display:none">锁定并拆章 &rarr;</button>
+        </div>
+        <div id="outlineStream" class="muted" style="font-family:var(--mono);font-size:11px;white-space:pre-wrap;margin:12px 0"></div>
+        <div class="card" id="beatsCard" style="display:none"><h3><span class="dot"></span>主线节点</h3><div id="beatsList"></div></div>
+        <div class="card" id="threadsCard" style="display:none"><h3><span class="dot"></span>支线</h3><div id="threadsList"></div></div>
+      </section>
+
+      <!-- Stage 4 章回 -->
+      <section class="stage" data-stage="4">
+        <div class="stage-head"><span class="idx">STAGE 04</span><h1>章回部署</h1></div>
+        <p class="stage-sub">大纲已拆为章回卡片。挑一章撰写微纲，随后进入圆桌戏台开演。</p>
+        <div class="grid c2" id="chapGrid"></div>
+      </section>
+
+      <!-- Stage 5 戏台 -->
+      <section class="stage" data-stage="5">
+        <div class="stage-head"><span class="idx">STAGE 05</span><h1>圆桌戏台</h1></div>
+        <p class="stage-sub">「戏剧统筹」逐轮调度角色登场，每位角色演绎体先<b>思考、查设定（ReAct）</b>再发言。设好字数预算即可开演，可随时暂停。</p>
+        <div class="card" id="theaterSetup">
+          <h3><span class="dot"></span>开演设置　<span class="muted" style="font-weight:400" id="curChapName"></span></h3>
+          <div class="grid c2">
+            <div><label class="fld">期望字数</label><input id="budget" type="number" value="2500"></div>
+            <div><label class="fld">硬上限</label><input id="ceiling" type="number" value="3500"></div>
+          </div>
+          <div class="btn-row"><button class="btn amber" id="btnAction">Action 开演</button></div>
+        </div>
+
+        <div class="theater" id="theaterMain" style="display:none">
+          <div class="stagefloor">
+            <div class="floor-head">
+              <span class="pill" id="wordPill">0 / 0 字</span>
+              <div class="progwrap"><div class="progbar" id="progbar"></div></div>
+              <button class="btn ghost" id="btnPause" style="padding:5px 12px">暂停</button>
+              <button class="btn ghost" id="btnStop" style="padding:5px 12px">收尾</button>
+            </div>
+            <div class="stream" id="stream"></div>
+          </div>
+          <div class="sidepanel">
+            <div class="panel"><h4>登场角色</h4><div id="castMini"></div></div>
+            <div class="panel" id="finishPanel" style="display:none">
+              <h4>研讨已收束</h4>
+              <p class="muted" style="font-size:12px">可校阅原始记录后，交「誊抄师」润色成正文。</p>
+              <div class="btn-row"><button class="btn amber" id="btnPolish">誊抄成稿 &rarr;</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="rawCard" style="display:none">
+          <h3><span class="dot"></span>研讨原始记录（可编辑）</h3>
+          <textarea id="rawText" rows="8"></textarea>
+        </div>
+        <div class="card" id="manuCard" style="display:none">
+          <h3><span class="dot"></span>誊抄正文</h3>
+          <div class="manuscript" id="manuscript"></div>
+        </div>
+      </section>
+
+      <!-- Stage 6 付梓 -->
+      <section class="stage" data-stage="6">
+        <div class="stage-head"><span class="idx">STAGE 06</span><h1>总览付梓</h1></div>
+        <p class="stage-sub">全书统计与「审稿人」一致性复核，最后导出成稿。</p>
+        <div class="grid c3" style="margin-bottom:18px">
+          <div class="stat"><div class="num" id="stChap">0</div><div class="lbl">章节</div></div>
+          <div class="stat"><div class="num" id="stWords">0</div><div class="lbl">总字数</div></div>
+          <div class="stat"><div class="num" id="stDone">0</div><div class="lbl">已成稿</div></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn amber" id="btnAudit">一致性审稿</button>
+          <button class="btn ghost" id="exMd">导出 Markdown</button>
+          <button class="btn ghost" id="exTxt">导出 TXT</button>
+        </div>
+        <div class="card" id="auditCard" style="display:none"><h3><span class="dot"></span>审稿报告</h3><div id="auditBody"></div></div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- 设置抽屉 -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <h2>设置</h2>
+  <label class="fld">DeepSeek API Key</label>
+  <input id="setKey" type="text" placeholder="sk-...">
+  <p class="muted" style="font-size:11px;margin-top:6px">兼容 OpenAI 协议。也可用环境变量 DEEPSEEK_API_KEY 覆盖。</p>
+  <label class="fld">规划/审稿模型（强推理）</label>
+  <select id="setReason"><option value="deepseek-reasoner">DeepSeek-R1</option><option value="deepseek-chat">DeepSeek-V3</option></select>
+  <label class="fld">演绎/润色模型</label>
+  <select id="setChat"><option value="deepseek-chat">DeepSeek-V3</option><option value="deepseek-reasoner">DeepSeek-R1</option></select>
+  <div class="btn-row"><button class="btn" id="saveSettings">保存</button></div>
+  <hr style="margin:20px 0;border:none;border-top:1px solid var(--line)">
+  <h2 style="font-size:16px">作品架</h2>
+  <div class="btn-row" style="margin-top:0">
+    <input id="newWorkTitle" type="text" placeholder="新作品标题" style="flex:1">
+    <button class="btn amber" id="btnNewWork">新建</button>
+  </div>
+  <div id="workList" style="margin-top:12px"></div>
+</aside>
+
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

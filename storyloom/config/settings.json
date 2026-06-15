@@ -1,0 +1,37 @@
+{
+  "providers": {
+    "deepseek": {
+      "api_key": "",
+      "base_url": "https://api.deepseek.com/v1"
+    }
+  },
+  "embedding": {
+    "provider": "deepseek_compatible",
+    "api_key": "",
+    "base_url": "https://api.deepseek.com/v1",
+    "model": "text-embedding-fallback",
+    "dim": 256,
+    "use_local_hash_fallback": true
+  },
+  "role_models": {
+    "muse": "deepseek-reasoner",
+    "castmaker": "deepseek-chat",
+    "loomplanner": "deepseek-reasoner",
+    "showrunner": "deepseek-chat",
+    "actor": "deepseek-chat",
+    "scribe": "deepseek-chat",
+    "auditor": "deepseek-reasoner"
+  },
+  "server": {
+    "host": "0.0.0.0",
+    "port": 8200
+  },
+  "rag": {
+    "db_path": "data/vector_store.db",
+    "collection_prefix": "loom_",
+    "chunk_size": 480,
+    "chunk_overlap": 80,
+    "top_k": 4
+  },
+  "global_persona": "你是「故事织机」中的写作智能体，专注创作逻辑自洽、人物鲜活的中文长篇小说。无论扮演何种角色，都要保持设定一致、情节连贯、文笔有质感。"
+}
